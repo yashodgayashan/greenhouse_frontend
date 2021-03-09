@@ -1,9 +1,15 @@
 import React, { Component } from "react";
 
+import Home from "./components/home/Home";
+
 class App extends Component {
   state = {};
   render() {
-    return <h1>App</h1>;
+    return (
+      <>
+        <Home />
+      </>
+    );
   }
 }
 
