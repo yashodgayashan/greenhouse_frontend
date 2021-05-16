@@ -46,4 +46,71 @@ export default class ResourceAPI {
   updateLocation(id, location) {
     return this.getHTTPClient().put("/locations/" + id, location);
   }
+
+  // Greenhouses
+  searchGreenhouses(filters) {
+    return this.getHTTPClient().post("/greenhouses/search", filters);
+  }
+
+  getGreenhouses() {
+    return this.getHTTPClient().get("/greenhouses");
+  }
+
+  deleteGreenhouse(id) {
+    return this.getHTTPClient().delete("/greenhouses/" + id);
+  }
+
+  createGreenhouse() {
+    const greenhouse = {
+      name: null,
+      location: null,
+      locationId: null,
+      imageURL: null
+    };
+    return this.getHTTPClient().post("/greenhouses", greenhouse);
+  }
+
+  getGreenhouse(id) {
+    return this.getHTTPClient().get("/greenhouses/" + id);
+  }
+
+  updateGreenhouse(id, greenhouse) {
+    return this.getHTTPClient().put("/greenhouses/" + id, greenhouse);
+  }
+
+  // Sensors
+  searchSensors(filters) {
+    return this.getHTTPClient().post("/sensors/search", filters);
+  }
+
+  getSensors() {
+    return this.getHTTPClient().get("/sensors");
+  }
+
+  deleteSensor(id) {
+    return this.getHTTPClient().delete("/sensors/" + id);
+  }
+
+  createSensor() {
+    const sensor = {
+      name: null,
+      description: null,
+      dataType: "null",
+      minValue: null,
+      maxValue: null,
+      technology: null,
+      workingVoltage: null,
+      dimensions: null,
+      specialFacts: null
+    };
+    return this.getHTTPClient().post("/sensors", sensor);
+  }
+
+  getSensor(id) {
+    return this.getHTTPClient().get("/sensors/" + id);
+  }
+
+  updateSensor(id, sensor) {
+    return this.getHTTPClient().put("/sensors/" + id, sensor);
+  }
 }

@@ -58,6 +58,34 @@ export function alertError(msg) {
   MySwal.fire("Something Went Wrong!", msg, "error");
 }
 
+export function deleteMessage(msg, apiCall, id) {
+  MySwal.fire({
+    title: msg,
+    text: "You won't be able to revert this!",
+    icon: "warning",
+    showCancelButton: true,
+    confirmButtonColor: "#3085d6",
+    cancelButtonColor: "#d33",
+    confirmButtonText: "Yes, delete it!"
+  }).then(result => {
+    if (result.value) {
+      apiCall(id);
+    }
+  });
+}
+
+export function createIsDeleteMsg(type, id) {
+  return "You want to Delete " + type + " with ID " + id + "?";
+}
+
+export function deleteMsgPopUp(message) {
+  MySwal.fire("Deleted!", message, "success");
+}
+
+export function createDeleteMsg(type, id) {
+  return type + " " + id + "  has been deleted.";
+}
+
 export function handleErr(error) {
   let err = INTERNAL_SERVER_ERROR;
   if (error.response) {
@@ -82,4 +110,13 @@ export function handleError(error) {
     }
   }
   alertError(err);
+}
+
+export function constructLocationArray(locations) {
+  let locationArray = [];
+  locations.forEach(location => {
+    let element = { value: location.id, label: location.name };
+    locationArray.push(element);
+  });
+  return locationArray;
 }

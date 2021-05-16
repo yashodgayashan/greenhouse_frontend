@@ -181,7 +181,7 @@ class Locations extends Component {
           .then(response => {
             MySwal.fire(
               "Deleted!",
-              "Listing " + id + " has been deleted.",
+              "Location " + id + " has been deleted.",
               "success"
             );
             this.searchLocations();
