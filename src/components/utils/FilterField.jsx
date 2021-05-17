@@ -12,6 +12,8 @@ class FilterFiled extends Component {
   }
 
   render() {
+    const fieldType =
+      this.props.fieldType == undefined ? "text" : this.props.fieldType;
     return (
       <>
         <Form.Label style={filterLabel}>{this.props.label}</Form.Label>
@@ -25,7 +27,7 @@ class FilterFiled extends Component {
           <Col style={inputCol}>
             <Form.Control
               size="sm"
-              type="text"
+              type={fieldType}
               onChange={this.props.fieldHandler}
               value={this.props.value}
             />

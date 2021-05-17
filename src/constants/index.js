@@ -16,6 +16,14 @@ export const strOptions = [
 
 export const eqOptions = [{ value: "eq", label: "Equals" }];
 
+export const intOptions = [
+  { value: "eq", label: "Equals" },
+  { value: "gt", label: "Greater than" },
+  { value: "gte", label: "Greater than or equal" },
+  { value: "lt", label: "Less than" },
+  { value: "lte", label: "Less than or equal" }
+];
+
 export const INTERNAL_SERVER_ERROR = "Internal server error!";
 
 // Styles

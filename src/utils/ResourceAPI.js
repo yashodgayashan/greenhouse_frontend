@@ -113,4 +113,32 @@ export default class ResourceAPI {
   updateSensor(id, sensor) {
     return this.getHTTPClient().put("/sensors/" + id, sensor);
   }
+
+  // Nodes
+  searchNodes(filters) {
+    return this.getHTTPClient().post("/nodes/search", filters);
+  }
+
+  getNodes() {
+    return this.getHTTPClient().get("/nodes");
+  }
+
+  deleteNode(id) {
+    return this.getHTTPClient().delete("/nodes/" + id);
+  }
+
+  createNode() {
+    const node = {
+      greenhouseId: null
+    };
+    return this.getHTTPClient().post("/nodes", node);
+  }
+
+  getNode(id) {
+    return this.getHTTPClient().get("/nodes/" + id);
+  }
+
+  updateNode(id, node) {
+    return this.getHTTPClient().put("/nodes/" + id, node);
+  }
 }

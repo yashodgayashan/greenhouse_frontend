@@ -23,7 +23,9 @@ class FormDropdown extends Component {
       {
         value: event.target.value
       },
-      () => this.props.handleOnChange(this.state.value.value)
+      () => {
+        this.props.handleOnChange(this.state.value);
+      }
     );
   };
 
@@ -38,7 +40,7 @@ class FormDropdown extends Component {
             <Col xs={8}>
               <select
                 onChange={this.handleOnChange}
-                value={this.state.value.value}
+                value={this.state.value}
                 style={whFilterStyle}
               >
                 {createSelectItems(this.state.options)}
@@ -52,14 +54,14 @@ class FormDropdown extends Component {
 }
 
 export function getValue(opts, value) {
-  let output;
+  let output = { value: 0, label: null };
   opts.map(location => {
     if (location.value == value) {
       output = location;
       return;
     }
   });
-  return output;
+  return output.value;
 }
 
 export function createSelectItems(opts) {

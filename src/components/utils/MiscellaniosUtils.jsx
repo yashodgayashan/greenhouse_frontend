@@ -120,3 +120,12 @@ export function constructLocationArray(locations) {
   });
   return locationArray;
 }
+
+export function constructGreenhousesArray(greenhouses) {
+  let greenhouseArray = [];
+  greenhouses.forEach(greenhouse => {
+    let element = { value: greenhouse.id, label: greenhouse.name };
+    greenhouseArray.push(element);
+  });
+  return greenhouseArray;
+}

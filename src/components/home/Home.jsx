@@ -11,6 +11,8 @@ import Greenhouses from "../greenhouses/Greenhouses";
 import GreenhouseDetails from "../greenhouses/GreenhouseDeatils";
 import Sensors from "../sensors/Sensors";
 import SensorDetails from "../sensors/SensorDetails";
+import Nodes from "../nodes/Nodes";
+import NodeDetails from "../nodes/NodeDetails";
 
 class Home extends Component {
   constructor(props) {
@@ -78,7 +80,10 @@ class Home extends Component {
                     <GreenhouseDetails />
                   </Route>
                   <Route exact path="/nodes">
-                    <h1>Nodes</h1>
+                    <Nodes />
+                  </Route>
+                  <Route exact path="/nodes/:id">
+                    <NodeDetails />
                   </Route>
                   <Route exact path="/sensors">
                     <Sensors />
