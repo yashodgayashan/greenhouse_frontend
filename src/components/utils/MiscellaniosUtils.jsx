@@ -129,3 +129,30 @@ export function constructGreenhousesArray(greenhouses) {
   });
   return greenhouseArray;
 }
+
+export function constructSensorArray(nodeSensors) {
+  let nodeSensorArray = [];
+  nodeSensors.forEach(nodeSensor => {
+    let element = { value: nodeSensor.id, label: nodeSensor.name };
+    nodeSensorArray.push(element);
+  });
+  return nodeSensorArray;
+}
+
+export function constructNodeArray(nodes) {
+  let nodeArray = [];
+  nodes.forEach(node => {
+    let element = { value: node.id, label: node.id };
+    nodeArray.push(element);
+  });
+  return nodeArray;
+}
+
+export function constructDropdownArray(items) {
+  let itemArray = [];
+  items.forEach(item => {
+    let element = { value: item.id, label: item.name };
+    itemArray.push(element);
+  });
+  return itemArray;
+}

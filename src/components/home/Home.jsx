@@ -13,6 +13,8 @@ import Sensors from "../sensors/Sensors";
 import SensorDetails from "../sensors/SensorDetails";
 import Nodes from "../nodes/Nodes";
 import NodeDetails from "../nodes/NodeDetails";
+import NodeSensor from "../nodeSensors/NodeSensors";
+import NodeSensorDetails from "../nodeSensors/NodeSensorDetails";
 
 class Home extends Component {
   constructor(props) {
@@ -92,7 +94,10 @@ class Home extends Component {
                     <SensorDetails />
                   </Route>
                   <Route exact path="/node-sensors">
-                    <h1>Node Sensors</h1>
+                    <NodeSensor />
+                  </Route>
+                  <Route exact path="/node-sensors/:id">
+                    <NodeSensorDetails />
                   </Route>
                 </Switch>
               </Router>

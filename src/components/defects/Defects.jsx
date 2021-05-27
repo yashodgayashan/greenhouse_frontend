@@ -3,43 +3,38 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 
-import { FILTER, intOptions, FILTERING, strOptions } from "../../constants";
+import { FILTER, strOptions, FILTERING } from "../../constants";
 import FilterHandler from "../utils/FilterHandler";
 import FilterDropdown from "../utils/FilterDropdown";
 import FilterField from "../utils/FilterField";
 import AddItem from "../utils/AddItem";
 import ResourceAPIs from "../../utils/ResourceAPI";
-import NodeSensorDetailsTable from "./NodeSensorDetailsTable";
-import {
-  handleErr,
-  constructSensorArray,
-  constructNodeArray
-} from "../utils/MiscellaniosUtils";
+import DefectDetailsTable from "./DefectDetailsTable";
+import { handleErr, constructDropdownArray } from "../utils/MiscellaniosUtils";
 
-class NodeSensor extends Component {
+class Defects extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
       filters: {
-        nodeId: {
+        name: {
+          condition: "eq",
+          value: ""
+        },
+        plantId: {
           condition: "eq",
           value: 0
         },
-        sensorId: {
-          condition: "eq",
-          value: 0
-        },
-        size: 100,
+        size: 20,
         from: 0
       },
       isProcessing: false,
       filterBtnText: FILTER,
       errMsg: "",
       results: [],
-      nodes: [],
-      sensors: [],
-      isNodeSensorLoaded: false,
+      plants: [],
+      isPlantLoaded: false,
       isUpdated: false
     };
   }
@@ -52,79 +47,61 @@ class NodeSensor extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.isUpdated !== this.state.isUpdated) {
-      this.searchNodeSensor();
+      this.searchDefects();
     }
   }
 
   clearFilters = () => {
     this.setState({
       filters: {
-        nodeId: {
+        name: {
+          condition: "eq",
+          value: ""
+        },
+        plantId: {
           condition: "eq",
           value: 0
         },
-        sensorId: {
-          condition: "eq",
-          value: 0
-        },
-        size: 100,
+        size: 20,
         from: 0
       }
     });
   };
 
-  onChangeNodeIdValue = selectedValue => {
+  onChangeNameValue = event => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.nodeId.value = selectedValue;
+    stateCopy.filters.name.value = event.target.value;
     this.setState(stateCopy);
   };
 
-  onChangeNodeIdFilter = selectedValue => {
+  onChangePlantValue = selectedValue => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.nodeId.condition = selectedValue;
+    stateCopy.filters.plantId.value = selectedValue;
     this.setState(stateCopy);
   };
 
-  onChangeSensorIdValue = selectedValue => {
+  onChangeNameFilter = selectedValue => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.sensorId.value = selectedValue;
+    stateCopy.filters.name.condition = selectedValue;
     this.setState(stateCopy);
   };
 
-  onChangeSensorIdFilter = selectedValue => {
+  onChangePlantFilter = selectedValue => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.sensorId.condition = selectedValue;
+    stateCopy.filters.plantId.condition = selectedValue;
     this.setState(stateCopy);
   };
 
-  getSensors = () => {
+  getPlants = () => {
     new ResourceAPIs()
-      .getSensors()
+      .getPlantInfos()
       .then(response => {
         this.setState(
           {
-            sensors: constructSensorArray(response.data)
+            plants: constructDropdownArray(response.data)
           },
           () => {
-            this.getNodes();
-          }
-        );
-      })
-      .catch(error => {
-        handleErr(error);
-      });
-  };
-
-  getNodes = () => {
-    new ResourceAPIs()
-      .getNodes()
-      .then(response => {
-        this.setState(
-          {
-            nodes: constructNodeArray(response.data)
-          },
-          () => {
-            this.setState({ isNodeSensorLoaded: true });
+            this.setState({ isPlantLoaded: true });
           }
         );
       })
@@ -135,9 +112,9 @@ class NodeSensor extends Component {
 
   handleAddNew = () => {
     new ResourceAPIs()
-      .createNodeSensor()
+      .createDefect()
       .then(res => {
-        window.location.href = "/node-sensors/" + res.data;
+        window.location.href = "/defects/" + res.data;
       })
       .catch(error => {
         handleErr(error);
@@ -146,13 +123,13 @@ class NodeSensor extends Component {
 
   increaseSize = () => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.from = this.state.filters.from + 100;
+    stateCopy.filters.from = this.state.filters.from + 20;
     this.setState(stateCopy);
   };
 
   decreaseSize = () => {
     let stateCopy = Object.assign({}, this.state);
-    stateCopy.filters.from = this.state.filters.from - 100;
+    stateCopy.filters.from = this.state.filters.from - 20;
     this.setState(stateCopy);
   };
 
@@ -161,16 +138,16 @@ class NodeSensor extends Component {
     stateCopy.filters.from = 0;
     this.setState(stateCopy);
 
-    this.searchNodeSensor();
+    this.searchDefects();
   };
 
-  searchNodeSensor() {
+  searchDefects() {
     this.setState({
       filterBtnText: FILTERING,
       isProcessing: true
     });
     new ResourceAPIs()
-      .searchNodeSensors(this.state.filters)
+      .searchDefects(this.state.filters)
       .then(res => {
         this.setState({
           filterBtnText: FILTER,
@@ -189,11 +166,11 @@ class NodeSensor extends Component {
   }
 
   componentDidMount() {
-    this.getSensors();
+    this.getPlants();
   }
 
   render() {
-    if (!this.state.isNodeSensorLoaded) {
+    if (!this.state.isPlantLoaded) {
       return <p>Loading...</p>;
     } else {
       return (
@@ -204,21 +181,21 @@ class NodeSensor extends Component {
                 <Card.Body>
                   <Row>
                     <Col xs={4}>
-                      <FilterDropdown
-                        label="Node Id"
-                        filterOptions={intOptions}
-                        filterHandler={this.onChangeNodeIdFilter}
-                        dropdownHandler={this.onChangeNodeIdValue}
-                        dropdownOptions={this.state.nodes}
+                      <FilterField
+                        label="Name"
+                        filterOptions={strOptions}
+                        filterHandler={this.onChangeNameFilter}
+                        fieldHandler={this.onChangeNameValue}
+                        value={this.state.filters.name.value}
                       />
                     </Col>
                     <Col xs={4}>
                       <FilterDropdown
-                        label="Sensor"
+                        label="Plants"
                         filterOptions={strOptions}
-                        filterHandler={this.onChangeSensorIdFilter}
-                        dropdownHandler={this.onChangeSensorIdValue}
-                        dropdownOptions={this.state.sensors}
+                        filterHandler={this.onChangePlantFilter}
+                        dropdownHandler={this.onChangePlantValue}
+                        dropdownOptions={this.state.plants}
                       />
                     </Col>
                     <Col xs={2}>
@@ -236,7 +213,7 @@ class NodeSensor extends Component {
                     </Col>
                     <Col xs={2}>
                       <AddItem
-                        label="Add New Node Sensor"
+                        label="Add New Defect"
                         handleAddNew={this.handleAddNew}
                       />
                     </Col>
@@ -247,9 +224,9 @@ class NodeSensor extends Component {
           </Row>
           <br />
           <Row>
-            <NodeSensorDetailsTable
+            <DefectDetailsTable
               results={this.state.results}
-              sensors={this.state.sensors}
+              plants={this.state.plants}
               isUpdate={this.toggleIsUpdated}
             />
           </Row>
@@ -259,4 +236,4 @@ class NodeSensor extends Component {
   }
 }
 
-export default NodeSensor;
+export default Defects;

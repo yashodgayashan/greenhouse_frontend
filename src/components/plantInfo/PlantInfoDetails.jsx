@@ -12,155 +12,122 @@ import withReactContent from "sweetalert2-react-content";
 import { SAVE } from "../../constants";
 import { format2NiceDate } from "../../utils/DateUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
-import {
-  showSaveSpinner,
-  handleError,
-  handleErr,
-  constructLocationArray
-} from "../utils/MiscellaniosUtils";
+import { showSaveSpinner, handleError } from "../utils/MiscellaniosUtils";
 import { getIdFromUrl } from "../../utils/MiscellaniosUtils";
 import DisabledFormComponent from "../utils/FormComponent";
 import FormComponent from "../utils/FormComponent";
-import FormDropdown from "../utils/FormDropdown";
 
 const MySwal = withReactContent(Swal);
 
-class GreenhouseDetails extends Component {
+class PlantInfoDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      greenhouse: {
+      plantInfo: {
         id: "",
         name: "",
-        location: "",
-        locationId: 0,
-        length: "",
-        width: "",
-        height: "",
+        description: "",
+        plantDuration: 0,
+        minTemperature: "",
+        maxTemperature: "",
         createdAt: "",
         modifiedAt: ""
       },
       errMsg: "",
-      isGreenhouseLoaded: false,
+      isPlantInfoLoaded: false,
       isProcessing: false,
-      saveGreenhouseBtnText: SAVE,
-      locations: []
+      saveBtnText: SAVE
     };
   }
 
   componentDidMount() {
-    this.getLocations();
+    this.getPlantInfoById();
   }
 
-  getLocations = () => {
+  getPlantInfoById = () => {
     new ResourceAPIs()
-      .getLocations()
-      .then(response => {
-        this.setState(
-          {
-            locations: constructLocationArray(response.data)
-          },
-          () => {
-            this.getGreenhouseById();
-          }
-        );
-      })
-      .catch(error => {
-        handleErr(error);
-      });
-  };
-
-  getGreenhouseById = () => {
-    new ResourceAPIs()
-      .getGreenhouse(getIdFromUrl())
+      .getPlantInfo(getIdFromUrl())
       .then(result => {
-        let greenhouseObj = result.data;
+        let plantInfoObj = result.data;
         this.setState({
-          greenhouse: {
-            id: greenhouseObj.id,
-            name: greenhouseObj.name,
-            location: greenhouseObj.location,
-            locationId: greenhouseObj.locationId,
-            length: greenhouseObj.length,
-            width: greenhouseObj.width,
-            height: greenhouseObj.height,
-            createdAt: greenhouseObj.createdAt,
-            modifiedAt: greenhouseObj.modifiedAt
+          plantInfo: {
+            id: plantInfoObj.id,
+            name: plantInfoObj.name,
+            description: plantInfoObj.description,
+            plantDuration: plantInfoObj.plantDuration,
+            minTemperature: plantInfoObj.minTemperature,
+            maxTemperature: plantInfoObj.maxTemperature,
+            createdAt: plantInfoObj.createdAt,
+            modifiedAt: plantInfoObj.modifiedAt
           },
-          isGreenhouseLoaded: true
+          isPlantInfoLoaded: true
         });
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isGreenhouseLoaded: false,
+          isPlantInfoLoaded: false,
           error
         });
       });
   };
 
-  handleCancelEditGreenhouse = () => {
-    this.getGreenhouseById();
+  handleCancelEditPlantInfo = () => {
+    this.getPlantInfoById();
   };
 
   onChangeName = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.name = event.target.value;
+    newState.plantInfo.name = event.target.value;
     this.setState(newState);
   };
 
-  onChangeLocation = event => {
+  onChangeDescription = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.location = event.target.value;
+    newState.plantInfo.description = event.target.value;
     this.setState(newState);
   };
 
-  onChangeLocationId = selectedValue => {
+  onChangeDuration = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.locationId = selectedValue;
+    newState.plantInfo.plantDuration = event.target.value;
     this.setState(newState);
   };
 
-  onChangeWidth = event => {
+  onChangeMinTemp = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.width = event.target.value;
+    newState.plantInfo.minTemperature = event.target.value;
     this.setState(newState);
   };
 
-  onChangeHeight = event => {
+  onChangeMaxTemp = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.height = event.target.value;
+    newState.plantInfo.maxTemperature = event.target.value;
     this.setState(newState);
   };
 
-  onChangeLength = event => {
-    let newState = Object.assign({}, this.state);
-    newState.greenhouse.length = event.target.value;
-    this.setState(newState);
-  };
-
-  handleEditGreenhouse = () => {
+  handleEditPlantInfo = () => {
     new ResourceAPIs()
-      .updateGreenhouse(getIdFromUrl(), this.state.greenhouse)
+      .updatePlantInfo(getIdFromUrl(), this.state.plantInfo)
       .then(result => {
         MySwal.fire(
           "Updated!",
-          "Greenhouse " + this.state.greenhouse.id + " has been Updated.",
+          "Plant Info " + this.state.plantInfo.id + " has been Updated.",
           "success"
         );
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isGreenhouseLoaded: false,
+          isPlantInfoLoaded: false,
           error
         });
       });
   };
 
   render() {
-    if (!this.state.isGreenhouseLoaded) {
+    if (!this.state.isPlantInfoLoaded) {
       return <p>Loading...</p>;
     } else {
       return (
@@ -170,7 +137,7 @@ class GreenhouseDetails extends Component {
               <div>
                 <Card border="secondary">
                   <Card.Header as="h5">
-                    <span style={{ marginTop: 60 }}>Greenhouse Details</span>
+                    <span style={{ marginTop: 60 }}>Plant Info Details</span>
 
                     <div style={{ float: "right" }}>
                       <span
@@ -183,15 +150,15 @@ class GreenhouseDetails extends Component {
                         size="sm"
                         style={{ width: 100 }}
                         disabled={this.state.isProcessing}
-                        onClick={this.handleEditGreenhouse}
+                        onClick={this.handleEditPlantInfo}
                       >
-                        {showSaveSpinner(this.state.saveGreenhouseBtnText)}
+                        {showSaveSpinner(this.state.saveBtnText)}
                       </Button>
                       <Button
                         variant="secondary"
                         size="sm"
                         style={{ marginLeft: 10, width: 100 }}
-                        onClick={this.handleCancelEditGreenhouse}
+                        onClick={this.handleCancelEditPlantInfo}
                         disabled={this.state.isProcessing}
                       >
                         <Clear /> Cancel
@@ -205,45 +172,39 @@ class GreenhouseDetails extends Component {
                           <DisabledFormComponent
                             name="ID"
                             inputType="number"
-                            value={this.state.greenhouse.id}
+                            value={this.state.plantInfo.id}
                           />
                           <FormComponent
                             name="Name"
                             inputType="text"
-                            value={this.state.greenhouse.name}
+                            value={this.state.plantInfo.name}
                             onChange={this.onChangeName}
                           />
                           <FormComponent
-                            name="Length(ft)"
-                            inputType="number"
-                            value={this.state.greenhouse.length}
-                            onChange={this.onChangeLength}
+                            name="Description"
+                            inputType="text"
+                            value={this.state.plantInfo.description}
+                            onChange={this.onChangeDescription}
                           />
                           <FormComponent
-                            name="Width(ft)"
+                            name="Plan Duration"
                             inputType="number"
-                            value={this.state.greenhouse.width}
-                            onChange={this.onChangeWidth}
-                          />
-                          <FormComponent
-                            name="Height(ft)"
-                            inputType="number"
-                            value={this.state.greenhouse.height}
-                            onChange={this.onChangeHeight}
+                            value={this.state.plantInfo.plantDuration}
+                            onChange={this.onChangeDuration}
                           />
                         </Col>
                         <Col xs={6}>
                           <FormComponent
-                            name="Place"
+                            name="Min Temp(C)"
                             inputType="text"
-                            value={this.state.greenhouse.location}
-                            onChange={this.onChangeLocation}
+                            value={this.state.plantInfo.minTemperature}
+                            onChange={this.onChangeMinTemp}
                           />
-                          <FormDropdown
-                            name="Location"
-                            value={this.state.greenhouse.locationId}
-                            options={this.state.locations}
-                            handleOnChange={this.onChangeLocationId}
+                          <FormComponent
+                            name="Max Temp(C)"
+                            inputType="text"
+                            value={this.state.plantInfo.maxTemperature}
+                            onChange={this.onChangeMaxTemp}
                           />
                           <Row>
                             <Col>
@@ -252,7 +213,7 @@ class GreenhouseDetails extends Component {
                             <Col>
                               <Badge variant="secondary">
                                 {format2NiceDate(
-                                  this.state.greenhouse.createdAt
+                                  this.state.plantInfo.createdAt
                                 )}
                               </Badge>
                             </Col>
@@ -264,7 +225,7 @@ class GreenhouseDetails extends Component {
                             <Col>
                               <Badge variant="secondary">
                                 {format2NiceDate(
-                                  this.state.greenhouse.modifiedAt
+                                  this.state.plantInfo.modifiedAt
                                 )}
                               </Badge>
                             </Col>
@@ -283,4 +244,4 @@ class GreenhouseDetails extends Component {
   }
 }
 
-export default GreenhouseDetails;
+export default PlantInfoDetails;

@@ -328,6 +328,8 @@ class Locations extends Component {
                       <TableCell align="right">ID</TableCell>
                       <TableCell align="right">Name</TableCell>
                       <TableCell align="right">Location</TableCell>
+                      <TableCell align="right">Latitude</TableCell>
+                      <TableCell align="right">Longatude</TableCell>
                       <TableCell align="right">Created At</TableCell>
                       <TableCell align="right">Modified At</TableCell>
                       <TableCell align="right">Controlls</TableCell>
@@ -343,6 +345,8 @@ class Locations extends Component {
                         </TableCell>
                         <TableCell align="right">{row.name}</TableCell>
                         <TableCell align="right">{row.location}</TableCell>
+                        <TableCell align="right">{row.latitude}</TableCell>
+                        <TableCell align="right">{row.longatude}</TableCell>
                         <TableCell align="right">
                           {format2NiceDate(row.createdAt)}
                         </TableCell>

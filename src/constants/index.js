@@ -24,6 +24,12 @@ export const intOptions = [
   { value: "lte", label: "Less than or equal" }
 ];
 
+export const levelOptions = [
+  { value: "Hight", label: "Hight" },
+  { value: "Medium", label: "Medium" },
+  { value: "Low", label: "Low" }
+];
+
 export const INTERNAL_SERVER_ERROR = "Internal server error!";
 
 // Styles

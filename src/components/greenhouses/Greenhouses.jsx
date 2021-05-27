@@ -1,9 +1,7 @@
 import React, { Component } from "react";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
-import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
-import { Add } from "@material-ui/icons";
 
 import { FILTER, strOptions, FILTERING } from "../../constants";
 import FilterHandler from "../utils/FilterHandler";

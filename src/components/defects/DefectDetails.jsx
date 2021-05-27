@@ -9,60 +9,59 @@ import { Clear } from "@material-ui/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-import { SAVE } from "../../constants";
+import { SAVE, levelOptions } from "../../constants";
 import { format2NiceDate } from "../../utils/DateUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
 import {
   showSaveSpinner,
   handleError,
   handleErr,
-  constructLocationArray
+  constructDropdownArray
 } from "../utils/MiscellaniosUtils";
 import { getIdFromUrl } from "../../utils/MiscellaniosUtils";
 import DisabledFormComponent from "../utils/FormComponent";
 import FormComponent from "../utils/FormComponent";
 import FormDropdown from "../utils/FormDropdown";
+import DefectManage from "./DefectManage";
 
 const MySwal = withReactContent(Swal);
 
-class GreenhouseDetails extends Component {
+class DefectDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      greenhouse: {
+      defect: {
         id: "",
         name: "",
-        location: "",
-        locationId: 0,
-        length: "",
-        width: "",
-        height: "",
+        description: "",
+        plantId: 0,
+        level: "",
         createdAt: "",
         modifiedAt: ""
       },
       errMsg: "",
-      isGreenhouseLoaded: false,
+      isDefectLoaded: false,
       isProcessing: false,
-      saveGreenhouseBtnText: SAVE,
-      locations: []
+      saveBtnText: SAVE,
+      plants: []
     };
   }
 
   componentDidMount() {
-    this.getLocations();
+    this.getPlants();
   }
 
-  getLocations = () => {
+  getPlants = () => {
     new ResourceAPIs()
-      .getLocations()
+      .getPlantInfos()
       .then(response => {
         this.setState(
           {
-            locations: constructLocationArray(response.data)
+            plants: constructDropdownArray(response.data)
           },
           () => {
-            this.getGreenhouseById();
+            this.getDefectById();
           }
         );
       })
@@ -71,96 +70,82 @@ class GreenhouseDetails extends Component {
       });
   };
 
-  getGreenhouseById = () => {
+  getDefectById = () => {
     new ResourceAPIs()
-      .getGreenhouse(getIdFromUrl())
+      .getDefect(getIdFromUrl())
       .then(result => {
-        let greenhouseObj = result.data;
+        let defect = result.data;
         this.setState({
-          greenhouse: {
-            id: greenhouseObj.id,
-            name: greenhouseObj.name,
-            location: greenhouseObj.location,
-            locationId: greenhouseObj.locationId,
-            length: greenhouseObj.length,
-            width: greenhouseObj.width,
-            height: greenhouseObj.height,
-            createdAt: greenhouseObj.createdAt,
-            modifiedAt: greenhouseObj.modifiedAt
+          defect: {
+            id: defect.id,
+            name: defect.name,
+            description: defect.description,
+            plantId: defect.plantId,
+            level: defect.level,
+            createdAt: defect.createdAt,
+            modifiedAt: defect.modifiedAt
           },
-          isGreenhouseLoaded: true
+          isDefectLoaded: true
         });
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isGreenhouseLoaded: false,
+          isDefectLoaded: false,
           error
         });
       });
   };
 
-  handleCancelEditGreenhouse = () => {
-    this.getGreenhouseById();
+  handleCancelEdit = () => {
+    this.getDefectById();
   };
 
   onChangeName = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.name = event.target.value;
+    newState.defect.name = event.target.value;
     this.setState(newState);
   };
 
-  onChangeLocation = event => {
+  onChangeDescription = event => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.location = event.target.value;
+    newState.defect.description = event.target.value;
     this.setState(newState);
   };
 
-  onChangeLocationId = selectedValue => {
+  onChangePlantId = plantId => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.locationId = selectedValue;
+    newState.defect.plantId = plantId;
     this.setState(newState);
   };
 
-  onChangeWidth = event => {
+  onChangeLevel = Level => {
     let newState = Object.assign({}, this.state);
-    newState.greenhouse.width = event.target.value;
+    newState.defect.level = Level;
     this.setState(newState);
   };
 
-  onChangeHeight = event => {
-    let newState = Object.assign({}, this.state);
-    newState.greenhouse.height = event.target.value;
-    this.setState(newState);
-  };
-
-  onChangeLength = event => {
-    let newState = Object.assign({}, this.state);
-    newState.greenhouse.length = event.target.value;
-    this.setState(newState);
-  };
-
-  handleEditGreenhouse = () => {
+  handleEditDefect = () => {
     new ResourceAPIs()
-      .updateGreenhouse(getIdFromUrl(), this.state.greenhouse)
+      .updateDefect(getIdFromUrl(), this.state.defect)
       .then(result => {
         MySwal.fire(
           "Updated!",
-          "Greenhouse " + this.state.greenhouse.id + " has been Updated.",
+          "Defect " + this.state.defect.id + " has been Updated.",
           "success"
         );
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isGreenhouseLoaded: false,
+          isDefectLoaded: false,
           error
         });
       });
   };
 
   render() {
-    if (!this.state.isGreenhouseLoaded) {
+    if (!this.state.isDefectLoaded) {
       return <p>Loading...</p>;
     } else {
       return (
@@ -170,7 +155,7 @@ class GreenhouseDetails extends Component {
               <div>
                 <Card border="secondary">
                   <Card.Header as="h5">
-                    <span style={{ marginTop: 60 }}>Greenhouse Details</span>
+                    <span style={{ marginTop: 60 }}>Defect Details</span>
 
                     <div style={{ float: "right" }}>
                       <span
@@ -183,15 +168,15 @@ class GreenhouseDetails extends Component {
                         size="sm"
                         style={{ width: 100 }}
                         disabled={this.state.isProcessing}
-                        onClick={this.handleEditGreenhouse}
+                        onClick={this.handleEditDefect}
                       >
-                        {showSaveSpinner(this.state.saveGreenhouseBtnText)}
+                        {showSaveSpinner(this.state.saveBtnText)}
                       </Button>
                       <Button
                         variant="secondary"
                         size="sm"
                         style={{ marginLeft: 10, width: 100 }}
-                        onClick={this.handleCancelEditGreenhouse}
+                        onClick={this.handleCancelEdit}
                         disabled={this.state.isProcessing}
                       >
                         <Clear /> Cancel
@@ -205,45 +190,33 @@ class GreenhouseDetails extends Component {
                           <DisabledFormComponent
                             name="ID"
                             inputType="number"
-                            value={this.state.greenhouse.id}
+                            value={this.state.defect.id}
                           />
                           <FormComponent
                             name="Name"
                             inputType="text"
-                            value={this.state.greenhouse.name}
+                            value={this.state.defect.name}
                             onChange={this.onChangeName}
                           />
                           <FormComponent
-                            name="Length(ft)"
-                            inputType="number"
-                            value={this.state.greenhouse.length}
-                            onChange={this.onChangeLength}
+                            name="Description"
+                            inputType="text"
+                            value={this.state.defect.description}
+                            onChange={this.onChangeDescription}
                           />
-                          <FormComponent
-                            name="Width(ft)"
-                            inputType="number"
-                            value={this.state.greenhouse.width}
-                            onChange={this.onChangeWidth}
-                          />
-                          <FormComponent
-                            name="Height(ft)"
-                            inputType="number"
-                            value={this.state.greenhouse.height}
-                            onChange={this.onChangeHeight}
+                          <FormDropdown
+                            name="Plant"
+                            value={this.state.defect.plantId}
+                            options={this.state.plants}
+                            handleOnChange={this.onChangePlantId}
                           />
                         </Col>
                         <Col xs={6}>
-                          <FormComponent
-                            name="Place"
-                            inputType="text"
-                            value={this.state.greenhouse.location}
-                            onChange={this.onChangeLocation}
-                          />
                           <FormDropdown
-                            name="Location"
-                            value={this.state.greenhouse.locationId}
-                            options={this.state.locations}
-                            handleOnChange={this.onChangeLocationId}
+                            name="Level"
+                            value={this.state.defect.level}
+                            options={levelOptions}
+                            handleOnChange={this.onChangeLevel}
                           />
                           <Row>
                             <Col>
@@ -251,9 +224,7 @@ class GreenhouseDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(
-                                  this.state.greenhouse.createdAt
-                                )}
+                                {format2NiceDate(this.state.defect.createdAt)}
                               </Badge>
                             </Col>
                           </Row>
@@ -263,9 +234,7 @@ class GreenhouseDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(
-                                  this.state.greenhouse.modifiedAt
-                                )}
+                                {format2NiceDate(this.state.defect.modifiedAt)}
                               </Badge>
                             </Col>
                           </Row>
@@ -277,10 +246,12 @@ class GreenhouseDetails extends Component {
               </div>
             </Col>
           </Row>
+          <br />
+          <DefectManage />
         </div>
       );
     }
   }
 }
 
-export default GreenhouseDetails;
+export default DefectDetails;

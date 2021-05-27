@@ -18,35 +18,36 @@ import {
 } from "../utils/MiscellaniosUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
 
-class GreenhouseDetailsTable extends Component {
+class NodeSensorDetailsTable extends Component {
   constructor(props) {
     super(props);
+    this.state = {};
   }
 
-  getLocationName = id => {
+  getSensorName = id => {
     let label;
-    this.props.locations.map(location => {
-      if (location.value == id) {
-        label = location.label;
+    this.props.sensors.map(sensor => {
+      if (sensor.value == id) {
+        label = sensor.label;
         return;
       }
     });
     return label;
   };
 
-  editGreenhouse = id => {
-    window.location.href = "/greenhouses/" + id;
+  editNodeSensor = id => {
+    window.location.href = "/node-sensors/" + id;
   };
 
-  deleteGreenhouse = id => {
-    deleteMessage(createIsDeleteMsg("Greenhouse", id), this.deleteApiCall, id);
+  deleteNodeSensor = id => {
+    deleteMessage(createIsDeleteMsg("NodeSensor", id), this.deleteApiCall, id);
   };
 
   deleteApiCall = id => {
     new ResourceAPIs()
-      .deleteGreenhouse(id)
+      .deleteNodeSensor(id)
       .then(response => {
-        createDeleteMsg("Greenhouse", id);
+        createDeleteMsg("NodeSensor", id);
         this.props.isUpdate();
       })
       .catch(error => {
@@ -63,12 +64,10 @@ class GreenhouseDetailsTable extends Component {
               <TableHead>
                 <TableRow>
                   <TableCell align="right">ID</TableCell>
-                  <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Place</TableCell>
-                  <TableCell align="right">Location</TableCell>
-                  <TableCell align="right">Length(ft)</TableCell>
-                  <TableCell align="right">Height(ft)</TableCell>
-                  <TableCell align="right">Width(ft)</TableCell>
+                  <TableCell align="right">Node Id</TableCell>
+                  <TableCell align="right">Sensor</TableCell>
+                  <TableCell align="right">Min Value</TableCell>
+                  <TableCell align="right">Max Value</TableCell>
                   <TableCell align="right">Created At</TableCell>
                   <TableCell align="right">Modified At</TableCell>
                   <TableCell align="right">Controlls</TableCell>
@@ -78,18 +77,16 @@ class GreenhouseDetailsTable extends Component {
                 {this.props.results.map((row, index) => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row" align="right">
-                      <a href={"/greenhouses/" + row.id} target="_blank">
+                      <a href={"/node-sensors/" + row.id} target="_blank">
                         {row.id}
                       </a>
                     </TableCell>
-                    <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.location}</TableCell>
+                    <TableCell align="right">{row.nodeId}</TableCell>
                     <TableCell align="right">
-                      {this.getLocationName(row.locationId)}
+                      {this.getSensorName(row.sensorId)}
                     </TableCell>
-                    <TableCell align="right">{row.length}</TableCell>
-                    <TableCell align="right">{row.height}</TableCell>
-                    <TableCell align="right">{row.width}</TableCell>
+                    <TableCell align="right">{row.minValue}</TableCell>
+                    <TableCell align="right">{row.maxValue}</TableCell>
                     <TableCell align="right">
                       {format2NiceDate(row.createdAt)}
                     </TableCell>
@@ -99,11 +96,11 @@ class GreenhouseDetailsTable extends Component {
                     <TableCell align="right">
                       <EditIcon
                         color="primary"
-                        onClick={() => this.editGreenhouse(row.id)}
+                        onClick={() => this.editNodeSensor(row.id)}
                       />
                       <DeleteIcon
                         color="secondary"
-                        onClick={() => this.deleteGreenhouse(row.id)}
+                        onClick={() => this.deleteNodeSensor(row.id)}
                       />
                     </TableCell>
                   </TableRow>
@@ -119,4 +116,4 @@ class GreenhouseDetailsTable extends Component {
   }
 }
 
-export default GreenhouseDetailsTable;
+export default NodeSensorDetailsTable;

@@ -18,35 +18,28 @@ import {
 } from "../utils/MiscellaniosUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
 
-class GreenhouseDetailsTable extends Component {
+class PlantInfoDetailsTable extends Component {
   constructor(props) {
     super(props);
   }
 
-  getLocationName = id => {
-    let label;
-    this.props.locations.map(location => {
-      if (location.value == id) {
-        label = location.label;
-        return;
-      }
-    });
-    return label;
+  editPlantInfo = id => {
+    window.location.href = "/plant-info/" + id;
   };
 
-  editGreenhouse = id => {
-    window.location.href = "/greenhouses/" + id;
-  };
-
-  deleteGreenhouse = id => {
-    deleteMessage(createIsDeleteMsg("Greenhouse", id), this.deleteApiCall, id);
+  deletePlantInfo = id => {
+    deleteMessage(
+      createIsDeleteMsg("Plant Information", id),
+      this.deleteApiCall,
+      id
+    );
   };
 
   deleteApiCall = id => {
     new ResourceAPIs()
-      .deleteGreenhouse(id)
+      .deletePlantInfo(id)
       .then(response => {
-        createDeleteMsg("Greenhouse", id);
+        createDeleteMsg("Plant Information", id);
         this.props.isUpdate();
       })
       .catch(error => {
@@ -64,11 +57,10 @@ class GreenhouseDetailsTable extends Component {
                 <TableRow>
                   <TableCell align="right">ID</TableCell>
                   <TableCell align="right">Name</TableCell>
-                  <TableCell align="right">Place</TableCell>
-                  <TableCell align="right">Location</TableCell>
-                  <TableCell align="right">Length(ft)</TableCell>
-                  <TableCell align="right">Height(ft)</TableCell>
-                  <TableCell align="right">Width(ft)</TableCell>
+                  <TableCell align="right">Description</TableCell>
+                  <TableCell align="right">Duration</TableCell>
+                  <TableCell align="right">Min Temperature(C)</TableCell>
+                  <TableCell align="right">Max Temperature(C)</TableCell>
                   <TableCell align="right">Created At</TableCell>
                   <TableCell align="right">Modified At</TableCell>
                   <TableCell align="right">Controlls</TableCell>
@@ -78,18 +70,15 @@ class GreenhouseDetailsTable extends Component {
                 {this.props.results.map((row, index) => (
                   <TableRow key={row.id}>
                     <TableCell component="th" scope="row" align="right">
-                      <a href={"/greenhouses/" + row.id} target="_blank">
+                      <a href={"/plant-info/" + row.id} target="_blank">
                         {row.id}
                       </a>
                     </TableCell>
                     <TableCell align="right">{row.name}</TableCell>
-                    <TableCell align="right">{row.location}</TableCell>
-                    <TableCell align="right">
-                      {this.getLocationName(row.locationId)}
-                    </TableCell>
-                    <TableCell align="right">{row.length}</TableCell>
-                    <TableCell align="right">{row.height}</TableCell>
-                    <TableCell align="right">{row.width}</TableCell>
+                    <TableCell align="right">{row.description}</TableCell>
+                    <TableCell align="right">{row.plantDuration}</TableCell>
+                    <TableCell align="right">{row.minTemperature}</TableCell>
+                    <TableCell align="right">{row.maxTemperature}</TableCell>
                     <TableCell align="right">
                       {format2NiceDate(row.createdAt)}
                     </TableCell>
@@ -99,11 +88,11 @@ class GreenhouseDetailsTable extends Component {
                     <TableCell align="right">
                       <EditIcon
                         color="primary"
-                        onClick={() => this.editGreenhouse(row.id)}
+                        onClick={() => this.editPlantInfo(row.id)}
                       />
                       <DeleteIcon
                         color="secondary"
-                        onClick={() => this.deleteGreenhouse(row.id)}
+                        onClick={() => this.deletePlantInfo(row.id)}
                       />
                     </TableCell>
                   </TableRow>
@@ -119,4 +108,4 @@ class GreenhouseDetailsTable extends Component {
   }
 }
 
-export default GreenhouseDetailsTable;
+export default PlantInfoDetailsTable;
