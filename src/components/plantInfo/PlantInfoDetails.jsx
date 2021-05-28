@@ -12,116 +12,122 @@ import withReactContent from "sweetalert2-react-content";
 import { SAVE } from "../../constants";
 import { format2NiceDate } from "../../utils/DateUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
-import {
-  showSaveSpinner,
-  handleError,
-  handleErr,
-  constructGreenhousesArray
-} from "../utils/MiscellaniosUtils";
+import { showSaveSpinner, handleError } from "../utils/MiscellaniosUtils";
 import { getIdFromUrl } from "../../utils/MiscellaniosUtils";
 import DisabledFormComponent from "../utils/FormComponent";
-import FormDropdown from "../utils/FormDropdown";
+import FormComponent from "../utils/FormComponent";
 
 const MySwal = withReactContent(Swal);
 
-class NodeDetails extends Component {
+class PlantInfoDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      node: {
+      plantInfo: {
         id: "",
-        greenhouseId: 0,
+        name: "",
+        description: "",
+        plantDuration: 0,
+        minTemperature: "",
+        maxTemperature: "",
         createdAt: "",
         modifiedAt: ""
       },
       errMsg: "",
-      isNodeLoaded: false,
+      isPlantInfoLoaded: false,
       isProcessing: false,
-      saveBtnText: SAVE,
-      greenhouses: []
+      saveBtnText: SAVE
     };
   }
 
   componentDidMount() {
-    this.getGreenhouses();
+    this.getPlantInfoById();
   }
 
-  getGreenhouses = () => {
+  getPlantInfoById = () => {
     new ResourceAPIs()
-      .getGreenhouses()
-      .then(response => {
-        this.setState(
-          {
-            greenhouses: constructGreenhousesArray(response.data)
-          },
-          () => {
-            this.getNodeById();
-          }
-        );
-      })
-      .catch(error => {
-        handleErr(error);
-      });
-  };
-
-  getNodeById = () => {
-    new ResourceAPIs()
-      .getNode(getIdFromUrl())
+      .getPlantInfo(getIdFromUrl())
       .then(result => {
-        console.log(result.data);
-        let nodeObj = result.data;
+        let plantInfoObj = result.data;
         this.setState({
-          node: {
-            id: nodeObj.id,
-            greenhouseId: nodeObj.greenhouseId,
-            createdAt: nodeObj.createdAt,
-            modifiedAt: nodeObj.modifiedAt
+          plantInfo: {
+            id: plantInfoObj.id,
+            name: plantInfoObj.name,
+            description: plantInfoObj.description,
+            plantDuration: plantInfoObj.plantDuration,
+            minTemperature: plantInfoObj.minTemperature,
+            maxTemperature: plantInfoObj.maxTemperature,
+            createdAt: plantInfoObj.createdAt,
+            modifiedAt: plantInfoObj.modifiedAt
           },
-          isNodeLoaded: true
+          isPlantInfoLoaded: true
         });
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isNodeLoaded: false,
+          isPlantInfoLoaded: false,
           error
         });
       });
   };
 
-  handleCancelEditNode = () => {
-    this.getNodeById();
+  handleCancelEditPlantInfo = () => {
+    this.getPlantInfoById();
   };
 
-  onChangeGreenhouseId = selectedValue => {
-    console.log(selectedValue);
+  onChangeName = event => {
     let newState = Object.assign({}, this.state);
-    newState.node.greenhouseId = selectedValue;
+    newState.plantInfo.name = event.target.value;
     this.setState(newState);
   };
 
-  handleEditNode = () => {
+  onChangeDescription = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.description = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeDuration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.plantDuration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMinTemp = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.minTemperature = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMaxTemp = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.maxTemperature = event.target.value;
+    this.setState(newState);
+  };
+
+  handleEditPlantInfo = () => {
     new ResourceAPIs()
-      .updateNode(getIdFromUrl(), this.state.node)
+      .updatePlantInfo(getIdFromUrl(), this.state.plantInfo)
       .then(result => {
         MySwal.fire(
           "Updated!",
-          "Node " + this.state.node.id + " has been Updated.",
+          "Plant Info " + this.state.plantInfo.id + " has been Updated.",
           "success"
         );
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isNodeLoaded: false,
+          isPlantInfoLoaded: false,
           error
         });
       });
   };
 
   render() {
-    if (!this.state.isNodeLoaded) {
+    if (!this.state.isPlantInfoLoaded) {
       return <p>Loading...</p>;
     } else {
       return (
@@ -131,7 +137,7 @@ class NodeDetails extends Component {
               <div>
                 <Card border="secondary">
                   <Card.Header as="h5">
-                    <span style={{ marginTop: 60 }}>Node Details</span>
+                    <span style={{ marginTop: 60 }}>Plant Info Details</span>
 
                     <div style={{ float: "right" }}>
                       <span
@@ -144,7 +150,7 @@ class NodeDetails extends Component {
                         size="sm"
                         style={{ width: 100 }}
                         disabled={this.state.isProcessing}
-                        onClick={this.handleEditNode}
+                        onClick={this.handleEditPlantInfo}
                       >
                         {showSaveSpinner(this.state.saveBtnText)}
                       </Button>
@@ -152,7 +158,7 @@ class NodeDetails extends Component {
                         variant="secondary"
                         size="sm"
                         style={{ marginLeft: 10, width: 100 }}
-                        onClick={this.handleCancelEditNode}
+                        onClick={this.handleCancelEditPlantInfo}
                         disabled={this.state.isProcessing}
                       >
                         <Clear /> Cancel
@@ -166,15 +172,39 @@ class NodeDetails extends Component {
                           <DisabledFormComponent
                             name="ID"
                             inputType="number"
-                            value={this.state.node.id}
+                            value={this.state.plantInfo.id}
+                          />
+                          <FormComponent
+                            name="Name"
+                            inputType="text"
+                            value={this.state.plantInfo.name}
+                            onChange={this.onChangeName}
+                          />
+                          <FormComponent
+                            name="Description"
+                            inputType="text"
+                            value={this.state.plantInfo.description}
+                            onChange={this.onChangeDescription}
+                          />
+                          <FormComponent
+                            name="Plan Duration"
+                            inputType="number"
+                            value={this.state.plantInfo.plantDuration}
+                            onChange={this.onChangeDuration}
                           />
                         </Col>
                         <Col xs={6}>
-                          <FormDropdown
-                            name="Greenhouse"
-                            value={this.state.node.greenhouseId}
-                            options={this.state.greenhouses}
-                            handleOnChange={this.onChangeGreenhouseId}
+                          <FormComponent
+                            name="Min Temp(C)"
+                            inputType="text"
+                            value={this.state.plantInfo.minTemperature}
+                            onChange={this.onChangeMinTemp}
+                          />
+                          <FormComponent
+                            name="Max Temp(C)"
+                            inputType="text"
+                            value={this.state.plantInfo.maxTemperature}
+                            onChange={this.onChangeMaxTemp}
                           />
                           <Row>
                             <Col>
@@ -182,7 +212,9 @@ class NodeDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(this.state.node.createdAt)}
+                                {format2NiceDate(
+                                  this.state.plantInfo.createdAt
+                                )}
                               </Badge>
                             </Col>
                           </Row>
@@ -192,7 +224,9 @@ class NodeDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(this.state.node.modifiedAt)}
+                                {format2NiceDate(
+                                  this.state.plantInfo.modifiedAt
+                                )}
                               </Badge>
                             </Col>
                           </Row>
@@ -210,4 +244,4 @@ class NodeDetails extends Component {
   }
 }
 
-export default NodeDetails;
+export default PlantInfoDetails;

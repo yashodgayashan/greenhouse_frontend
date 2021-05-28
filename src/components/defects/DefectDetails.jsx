@@ -9,54 +9,59 @@ import { Clear } from "@material-ui/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
-import { SAVE } from "../../constants";
+import { SAVE, levelOptions } from "../../constants";
 import { format2NiceDate } from "../../utils/DateUtils";
 import ResourceAPIs from "../../utils/ResourceAPI";
 import {
   showSaveSpinner,
   handleError,
   handleErr,
-  constructGreenhousesArray
+  constructDropdownArray
 } from "../utils/MiscellaniosUtils";
 import { getIdFromUrl } from "../../utils/MiscellaniosUtils";
 import DisabledFormComponent from "../utils/FormComponent";
+import FormComponent from "../utils/FormComponent";
 import FormDropdown from "../utils/FormDropdown";
+import DefectManage from "./DefectManage";
 
 const MySwal = withReactContent(Swal);
 
-class NodeDetails extends Component {
+class DefectDetails extends Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      node: {
+      defect: {
         id: "",
-        greenhouseId: 0,
+        name: "",
+        description: "",
+        plantId: 0,
+        level: "",
         createdAt: "",
         modifiedAt: ""
       },
       errMsg: "",
-      isNodeLoaded: false,
+      isDefectLoaded: false,
       isProcessing: false,
       saveBtnText: SAVE,
-      greenhouses: []
+      plants: []
     };
   }
 
   componentDidMount() {
-    this.getGreenhouses();
+    this.getPlants();
   }
 
-  getGreenhouses = () => {
+  getPlants = () => {
     new ResourceAPIs()
-      .getGreenhouses()
+      .getPlantInfos()
       .then(response => {
         this.setState(
           {
-            greenhouses: constructGreenhousesArray(response.data)
+            plants: constructDropdownArray(response.data)
           },
           () => {
-            this.getNodeById();
+            this.getDefectById();
           }
         );
       })
@@ -65,63 +70,82 @@ class NodeDetails extends Component {
       });
   };
 
-  getNodeById = () => {
+  getDefectById = () => {
     new ResourceAPIs()
-      .getNode(getIdFromUrl())
+      .getDefect(getIdFromUrl())
       .then(result => {
-        console.log(result.data);
-        let nodeObj = result.data;
+        let defect = result.data;
         this.setState({
-          node: {
-            id: nodeObj.id,
-            greenhouseId: nodeObj.greenhouseId,
-            createdAt: nodeObj.createdAt,
-            modifiedAt: nodeObj.modifiedAt
+          defect: {
+            id: defect.id,
+            name: defect.name,
+            description: defect.description,
+            plantId: defect.plantId,
+            level: defect.level,
+            createdAt: defect.createdAt,
+            modifiedAt: defect.modifiedAt
           },
-          isNodeLoaded: true
+          isDefectLoaded: true
         });
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isNodeLoaded: false,
+          isDefectLoaded: false,
           error
         });
       });
   };
 
-  handleCancelEditNode = () => {
-    this.getNodeById();
+  handleCancelEdit = () => {
+    this.getDefectById();
   };
 
-  onChangeGreenhouseId = selectedValue => {
-    console.log(selectedValue);
+  onChangeName = event => {
     let newState = Object.assign({}, this.state);
-    newState.node.greenhouseId = selectedValue;
+    newState.defect.name = event.target.value;
     this.setState(newState);
   };
 
-  handleEditNode = () => {
+  onChangeDescription = event => {
+    let newState = Object.assign({}, this.state);
+    newState.defect.description = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangePlantId = plantId => {
+    let newState = Object.assign({}, this.state);
+    newState.defect.plantId = plantId;
+    this.setState(newState);
+  };
+
+  onChangeLevel = Level => {
+    let newState = Object.assign({}, this.state);
+    newState.defect.level = Level;
+    this.setState(newState);
+  };
+
+  handleEditDefect = () => {
     new ResourceAPIs()
-      .updateNode(getIdFromUrl(), this.state.node)
+      .updateDefect(getIdFromUrl(), this.state.defect)
       .then(result => {
         MySwal.fire(
           "Updated!",
-          "Node " + this.state.node.id + " has been Updated.",
+          "Defect " + this.state.defect.id + " has been Updated.",
           "success"
         );
       })
       .catch(error => {
         handleError(error);
         this.setState({
-          isNodeLoaded: false,
+          isDefectLoaded: false,
           error
         });
       });
   };
 
   render() {
-    if (!this.state.isNodeLoaded) {
+    if (!this.state.isDefectLoaded) {
       return <p>Loading...</p>;
     } else {
       return (
@@ -131,7 +155,7 @@ class NodeDetails extends Component {
               <div>
                 <Card border="secondary">
                   <Card.Header as="h5">
-                    <span style={{ marginTop: 60 }}>Node Details</span>
+                    <span style={{ marginTop: 60 }}>Defect Details</span>
 
                     <div style={{ float: "right" }}>
                       <span
@@ -144,7 +168,7 @@ class NodeDetails extends Component {
                         size="sm"
                         style={{ width: 100 }}
                         disabled={this.state.isProcessing}
-                        onClick={this.handleEditNode}
+                        onClick={this.handleEditDefect}
                       >
                         {showSaveSpinner(this.state.saveBtnText)}
                       </Button>
@@ -152,7 +176,7 @@ class NodeDetails extends Component {
                         variant="secondary"
                         size="sm"
                         style={{ marginLeft: 10, width: 100 }}
-                        onClick={this.handleCancelEditNode}
+                        onClick={this.handleCancelEdit}
                         disabled={this.state.isProcessing}
                       >
                         <Clear /> Cancel
@@ -166,15 +190,33 @@ class NodeDetails extends Component {
                           <DisabledFormComponent
                             name="ID"
                             inputType="number"
-                            value={this.state.node.id}
+                            value={this.state.defect.id}
+                          />
+                          <FormComponent
+                            name="Name"
+                            inputType="text"
+                            value={this.state.defect.name}
+                            onChange={this.onChangeName}
+                          />
+                          <FormComponent
+                            name="Description"
+                            inputType="text"
+                            value={this.state.defect.description}
+                            onChange={this.onChangeDescription}
+                          />
+                          <FormDropdown
+                            name="Plant"
+                            value={this.state.defect.plantId}
+                            options={this.state.plants}
+                            handleOnChange={this.onChangePlantId}
                           />
                         </Col>
                         <Col xs={6}>
                           <FormDropdown
-                            name="Greenhouse"
-                            value={this.state.node.greenhouseId}
-                            options={this.state.greenhouses}
-                            handleOnChange={this.onChangeGreenhouseId}
+                            name="Level"
+                            value={this.state.defect.level}
+                            options={levelOptions}
+                            handleOnChange={this.onChangeLevel}
                           />
                           <Row>
                             <Col>
@@ -182,7 +224,7 @@ class NodeDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(this.state.node.createdAt)}
+                                {format2NiceDate(this.state.defect.createdAt)}
                               </Badge>
                             </Col>
                           </Row>
@@ -192,7 +234,7 @@ class NodeDetails extends Component {
                             </Col>
                             <Col>
                               <Badge variant="secondary">
-                                {format2NiceDate(this.state.node.modifiedAt)}
+                                {format2NiceDate(this.state.defect.modifiedAt)}
                               </Badge>
                             </Col>
                           </Row>
@@ -204,10 +246,12 @@ class NodeDetails extends Component {
               </div>
             </Col>
           </Row>
+          <br />
+          <DefectManage />
         </div>
       );
     }
   }
 }
 
-export default NodeDetails;
+export default DefectDetails;

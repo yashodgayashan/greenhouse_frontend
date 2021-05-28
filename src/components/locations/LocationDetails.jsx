@@ -5,7 +5,6 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
 import { Clear } from "@material-ui/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
@@ -17,7 +16,7 @@ import {
 } from "../../utils/FormUtils";
 import { showSaveSpinner, handleError } from "../utils/MiscellaniosUtils";
 import { getIdFromUrl } from "../../utils/MiscellaniosUtils";
-import { SAVE, EDIT } from "../../constants";
+import { SAVE } from "../../constants";
 import ResourceAPIs from "../../utils/ResourceAPI";
 
 const MySwal = withReactContent(Swal);
@@ -31,6 +30,8 @@ class LocationDetails extends Component {
         id: "",
         name: "",
         location: "",
+        latitude: "",
+        longatude: "",
         createdAt: "",
         modifiedAt: ""
       },
@@ -55,6 +56,8 @@ class LocationDetails extends Component {
             id: locationObj.id,
             name: locationObj.name,
             location: locationObj.location,
+            latitude: locationObj.latitude,
+            longatude: locationObj.longatude,
             createdAt: locationObj.createdAt,
             modifiedAt: locationObj.modifiedAt
           },
@@ -79,6 +82,18 @@ class LocationDetails extends Component {
   onChangeLocation = event => {
     let newState = Object.assign({}, this.state);
     newState.location.location = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeLongatude = event => {
+    let newState = Object.assign({}, this.state);
+    newState.location.longatude = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeLatitude = event => {
+    let newState = Object.assign({}, this.state);
+    newState.location.latitude = event.target.value;
     this.setState(newState);
   };
 
@@ -160,13 +175,25 @@ class LocationDetails extends Component {
                             this.onChangeName
                           )}
                           {getFormComponent(
+                            "Latitude",
+                            "number",
+                            this.state.location.latitude,
+                            this.onChangeLatitude
+                          )}
+                          {getFormComponent(
+                            "Longitude",
+                            "number",
+                            this.state.location.longatude,
+                            this.onChangeLongatude
+                          )}
+                        </Col>
+                        <Col xs={6}>
+                          {getFormComponent(
                             "Location",
                             "text",
                             this.state.location.location,
                             this.onChangeLocation
                           )}
-                        </Col>
-                        <Col xs={6}>
                           <Row>
                             <Col>
                               <Form.Label>Created At</Form.Label>

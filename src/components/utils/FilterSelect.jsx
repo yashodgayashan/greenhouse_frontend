@@ -17,7 +17,6 @@ class FilterSelect extends Component {
   }
 
   handleOnChange = event => {
-    console.log(event.target.value);
     this.setState(
       {
         value: event.target.value

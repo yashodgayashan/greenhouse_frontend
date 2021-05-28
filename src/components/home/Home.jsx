@@ -7,6 +7,14 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import Locations from "../locations/Locations";
 import LocationDetails from "../locations/LocationDetails";
+import Greenhouses from "../greenhouses/Greenhouses";
+import GreenhouseDetails from "../greenhouses/GreenhouseDeatils";
+import Sensors from "../sensors/Sensors";
+import SensorDetails from "../sensors/SensorDetails";
+import Nodes from "../nodes/Nodes";
+import NodeDetails from "../nodes/NodeDetails";
+import NodeSensor from "../nodeSensors/NodeSensors";
+import NodeSensorDetails from "../nodeSensors/NodeSensorDetails";
 
 class Home extends Component {
   constructor(props) {
@@ -68,16 +76,28 @@ class Home extends Component {
                     <LocationDetails />
                   </Route>
                   <Route exact path="/greenhouses">
-                    <h1>Greenhouses</h1>
+                    <Greenhouses />
+                  </Route>
+                  <Route exact path="/greenhouses/:id">
+                    <GreenhouseDetails />
                   </Route>
                   <Route exact path="/nodes">
-                    <h1>Nodes</h1>
+                    <Nodes />
+                  </Route>
+                  <Route exact path="/nodes/:id">
+                    <NodeDetails />
                   </Route>
                   <Route exact path="/sensors">
-                    <h1>Sensors</h1>
+                    <Sensors />
+                  </Route>
+                  <Route exact path="/sensors/:id">
+                    <SensorDetails />
                   </Route>
                   <Route exact path="/node-sensors">
-                    <h1>Node Sensors</h1>
+                    <NodeSensor />
+                  </Route>
+                  <Route exact path="/node-sensors/:id">
+                    <NodeSensorDetails />
                   </Route>
                 </Switch>
               </Router>
