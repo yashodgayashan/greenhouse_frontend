@@ -198,10 +198,23 @@ export default class ResourceAPI {
   createPlantInfo() {
     const plantInfo = {
       name: null,
+      species: null,
       description: null,
-      minTemperature: null,
-      maxTemperature: null,
-      plantDuration: null
+      plantDuration: null,
+      minTemperatureLow: null,
+      minTemperatureHigh: null,
+      maxTemperatureLow: null,
+      maxTemperatureHigh: null,
+      spacing: null,
+      plantsPerPot: null,
+      minNoOfHarvest: null,
+      maxNumberOfHarvest: null,
+      averageWeightOfHarvest: null,
+      stage1Duration: null,
+      stage2Duration: null,
+      stage3Duration: null,
+      stage4Duration: null,
+      soil: null
     };
     return this.getHTTPClient().post("/plant/info", plantInfo);
   }
@@ -211,6 +224,7 @@ export default class ResourceAPI {
   }
 
   updatePlantInfo(id, plantInfo) {
+    console.log(plantInfo);
     return this.getHTTPClient().put("/plant/info/" + id, plantInfo);
   }
 
@@ -333,5 +347,39 @@ export default class ResourceAPI {
       "/defect-precautions/" + id,
       defectPrecaution
     );
+  }
+
+  // fertilizers
+  searchFertilizers(filters) {
+    return this.getHTTPClient().post("/fertilizers/search", filters);
+  }
+
+  getFertilizers() {
+    return this.getHTTPClient().get("/fertilizers");
+  }
+
+  deleteFertilizer(id) {
+    return this.getHTTPClient().delete("/fertilizers/" + id);
+  }
+
+  createFertilizer() {
+    const fertilizer = {
+      name: null,
+      description: null,
+      plantId: null, // species_id
+      stage: null,
+      medium: null,
+      quantity: null,
+      frequency: null
+    };
+    return this.getHTTPClient().post("/fertilizers", fertilizer);
+  }
+
+  getFertilizer(id) {
+    return this.getHTTPClient().get("/fertilizers/" + id);
+  }
+
+  updateFertilizer(id, defectPrecaution) {
+    return this.getHTTPClient().put("/fertilizers/" + id, defectPrecaution);
   }
 }

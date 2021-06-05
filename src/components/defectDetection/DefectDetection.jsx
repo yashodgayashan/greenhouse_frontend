@@ -6,7 +6,8 @@ class DefectDetection extends Component {
     super(props);
     this.state = {
       file: "",
-      imagePreviewUrl: ""
+      imagePreviewUrl: "",
+      defect: ""
     };
     this._handleImageChange = this._handleImageChange.bind(this);
     this._handleSubmit = this._handleSubmit.bind(this);
@@ -18,7 +19,9 @@ class DefectDetection extends Component {
     data.append("file", this.state.file);
 
     new ResourceAPIs().predictDefect(data).then(response => {
-      console.log(response);
+      this.setState({
+        defect: response.data
+      })
     });
   }
 
@@ -47,6 +50,7 @@ class DefectDetection extends Component {
 
     return (
       <div>
+      <div>
         <form onSubmit={this._handleSubmit}>
           <input type="file" onChange={this._handleImageChange} />
           <button type="submit" onClick={this._handleSubmit}>
@@ -54,6 +58,10 @@ class DefectDetection extends Component {
           </button>
         </form>
         {$imagePreview}
+      </div>
+      <div>
+        {this.state.defect}
+      </div>
       </div>
     );
   }

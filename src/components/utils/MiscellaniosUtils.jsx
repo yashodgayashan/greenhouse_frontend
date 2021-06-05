@@ -156,3 +156,12 @@ export function constructDropdownArray(items) {
   });
   return itemArray;
 }
+
+export function constructPlantSpeciesArray(items) {
+  let itemArray = [];
+  items.forEach(item => {
+    let element = { value: item.id, label: item.species };
+    itemArray.push(element);
+  });
+  return itemArray;
+}

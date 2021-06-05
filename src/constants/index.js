@@ -30,6 +30,20 @@ export const levelOptions = [
   { value: "Low", label: "Low" }
 ];
 
+export const FertilizerFrequencyOptions = [
+  { value: "Daily", label: "Daily" },
+  { value: "Weekly", label: "Weekly" },
+  { value: "TwiseAWeek", label: "TwiseAWeek" },
+  { value: "Monthly", label: "Monthly" }
+];
+
+export const PlantStageOptions = [
+  { value: 1, label: "Baby Plant" },
+  { value: 2, label: "Flowering" },
+  { value: 3, label: "Crop Start" },
+  { value: 4, label: "Harvesting" }
+];
+
 export const INTERNAL_SERVER_ERROR = "Internal server error!";
 
 // Styles

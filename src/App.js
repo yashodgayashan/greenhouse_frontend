@@ -16,6 +16,8 @@ import NodeSensor from "./components/nodeSensors/NodeSensors";
 import NodeSensorDetails from "./components/nodeSensors/NodeSensorDetails";
 import PlantInfo from "./components/plantInfo/PlantInfo";
 import PlantInfoDetails from "./components/plantInfo/PlantInfoDetails";
+import Fertilizers from "./components/fertilizers/Fertilizers";
+import FertilizerDetails from "./components/fertilizers/FertilizerDetails";
 
 import DefectDetection from "./components/defectDetection/DefectDetection";
 import Defects from "./components/defects/Defects";
@@ -75,6 +77,7 @@ class App extends Component {
               </NavDropdown>
               <Nav.Link href="/harvest">Harvesting</Nav.Link>
               <Nav.Link href="/plant-info">Plant Info</Nav.Link>
+              <Nav.Link href="/fertilizers">Fertilizers</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Navbar>
@@ -129,6 +132,12 @@ class App extends Component {
               </Route>
               <Route exact path="/defects/:id">
                 <DefectDetails />
+              </Route>
+              <Route exact path="/fertilizers">
+                <Fertilizers />
+              </Route>
+              <Route exact path="/fertilizers/:id">
+                <FertilizerDetails />
               </Route>
             </Switch>
           </div>

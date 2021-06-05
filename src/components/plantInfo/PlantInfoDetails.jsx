@@ -26,13 +26,24 @@ class PlantInfoDetails extends Component {
     this.state = {
       plantInfo: {
         id: "",
-        name: "",
-        description: "",
-        plantDuration: 0,
-        minTemperature: "",
-        maxTemperature: "",
-        createdAt: "",
-        modifiedAt: ""
+        name: null,
+        species: null,
+        description: null,
+        plantDuration: null,
+        minTemperatureLow: null,
+        minTemperatureHigh: null,
+        maxTemperatureLow: null,
+        maxTemperatureHigh: null,
+        spacing: null,
+        plantsPerPot: null,
+        minNoOfHarvest: null,
+        maxNumberOfHarvest: null,
+        averageWeightOfHarvest: null,
+        stage1Duration: null,
+        stage2Duration: null,
+        stage3Duration: null,
+        stage4Duration: null,
+        solid: null
       },
       errMsg: "",
       isPlantInfoLoaded: false,
@@ -50,14 +61,28 @@ class PlantInfoDetails extends Component {
       .getPlantInfo(getIdFromUrl())
       .then(result => {
         let plantInfoObj = result.data;
+        console.log(plantInfoObj);
         this.setState({
           plantInfo: {
             id: plantInfoObj.id,
             name: plantInfoObj.name,
+            species: plantInfoObj.species,
             description: plantInfoObj.description,
             plantDuration: plantInfoObj.plantDuration,
-            minTemperature: plantInfoObj.minTemperature,
-            maxTemperature: plantInfoObj.maxTemperature,
+            minTemperatureLow: plantInfoObj.minTemperatureLow,
+            minTemperatureHigh: plantInfoObj.minTemperatureHigh,
+            maxTemperatureLow: plantInfoObj.maxTemperatureLow,
+            maxTemperatureHigh: plantInfoObj.maxTemperatureHigh,
+            spacing: plantInfoObj.spacing,
+            plantsPerPot: plantInfoObj.plantsPerPot,
+            minNoOfHarvest: plantInfoObj.minNoOfHarvest,
+            maxNumberOfHarvest: plantInfoObj.maxNumberOfHarvest,
+            averageWeightOfHarvest: plantInfoObj.averageWeightOfHarvest,
+            stage1Duration: plantInfoObj.stage1Duration,
+            stage2Duration: plantInfoObj.stage2Duration,
+            stage3Duration: plantInfoObj.stage3Duration,
+            stage4Duration: plantInfoObj.stage4Duration,
+            solid: plantInfoObj.solid,
             createdAt: plantInfoObj.createdAt,
             modifiedAt: plantInfoObj.modifiedAt
           },
@@ -83,6 +108,12 @@ class PlantInfoDetails extends Component {
     this.setState(newState);
   };
 
+  onChangeSpecies = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.species = event.target.value;
+    this.setState(newState);
+  };
+
   onChangeDescription = event => {
     let newState = Object.assign({}, this.state);
     newState.plantInfo.description = event.target.value;
@@ -95,15 +126,93 @@ class PlantInfoDetails extends Component {
     this.setState(newState);
   };
 
-  onChangeMinTemp = event => {
+  onChangeMinTemperatureLow = event => {
     let newState = Object.assign({}, this.state);
-    newState.plantInfo.minTemperature = event.target.value;
+    newState.plantInfo.minTemperatureLow = event.target.value;
     this.setState(newState);
   };
 
-  onChangeMaxTemp = event => {
+  onChangeMinTemperatureHigh = event => {
     let newState = Object.assign({}, this.state);
-    newState.plantInfo.maxTemperature = event.target.value;
+    newState.plantInfo.minTemperatureHigh = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMaxTemperatureLow = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.maxTemperatureLow = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMaxTemperatureHigh = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.maxTemperatureHigh = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeSpacing = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.spacing = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangePlantsPerPot = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.plantsPerPot = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMinNoOfHarvest = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.minNoOfHarvest = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeMaxNumberOfHarvest = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.maxNumberOfHarvest = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeAverageWeightOfHarvest = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.averageWeightOfHarvest = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeStage1Duration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.stage1Duration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeStage1Duration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.stage1Duration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeStage2Duration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.stage2Duration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeStage3Duration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.stage3Duration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeStage4Duration = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.stage4Duration = event.target.value;
+    this.setState(newState);
+  };
+
+  onChangeSolid = event => {
+    let newState = Object.assign({}, this.state);
+    newState.plantInfo.solid = event.target.value;
     this.setState(newState);
   };
 
@@ -181,6 +290,12 @@ class PlantInfoDetails extends Component {
                             onChange={this.onChangeName}
                           />
                           <FormComponent
+                            name="Species"
+                            inputType="text"
+                            value={this.state.plantInfo.species}
+                            onChange={this.onChangeSpecies}
+                          />
+                          <FormComponent
                             name="Description"
                             inputType="text"
                             value={this.state.plantInfo.description}
@@ -192,19 +307,91 @@ class PlantInfoDetails extends Component {
                             value={this.state.plantInfo.plantDuration}
                             onChange={this.onChangeDuration}
                           />
+                          <FormComponent
+                            name="Min Temperature Low(C)"
+                            inputType="number"
+                            value={this.state.plantInfo.minTemperatureLow}
+                            onChange={this.onChangeMinTemperatureLow}
+                          />
+                          <FormComponent
+                            name="Min Temperature High(C)"
+                            inputType="number"
+                            value={this.state.plantInfo.minTemperatureHigh}
+                            onChange={this.onChangeMinTemperatureHigh}
+                          />
+                          <FormComponent
+                            name="Max Temperature Low(C)"
+                            inputType="number"
+                            value={this.state.plantInfo.maxTemperatureLow}
+                            onChange={this.onChangeMaxTemperatureLow}
+                          />
+                          <FormComponent
+                            name="Max Temperature High(C)"
+                            inputType="number"
+                            value={this.state.plantInfo.maxTemperatureHigh}
+                            onChange={this.onChangeMaxTemperatureHigh}
+                          />
+                          <FormComponent
+                            name="Spacing"
+                            inputType="number"
+                            value={this.state.plantInfo.spacing}
+                            onChange={this.onChangeSpacing}
+                          />
                         </Col>
                         <Col xs={6}>
                           <FormComponent
-                            name="Min Temp(C)"
-                            inputType="text"
-                            value={this.state.plantInfo.minTemperature}
-                            onChange={this.onChangeMinTemp}
+                            name="Plants per plot"
+                            inputType="number"
+                            value={this.state.plantInfo.plantsPerPot}
+                            onChange={this.onChangePlantsPerPot}
                           />
                           <FormComponent
-                            name="Max Temp(C)"
+                            name="Min no of harvest"
+                            inputType="number"
+                            value={this.state.plantInfo.minNoOfHarvest}
+                            onChange={this.onChangeMinNoOfHarvest}
+                          />
+                          <FormComponent
+                            name="Max no of harvest"
+                            inputType="number"
+                            value={this.state.plantInfo.maxNumberOfHarvest}
+                            onChange={this.onChangeMaxNumberOfHarvest}
+                          />
+                          <FormComponent
+                            name="Average weight of harvest"
+                            inputType="number"
+                            value={this.state.plantInfo.averageWeightOfHarvest}
+                            onChange={this.onChangeAverageWeightOfHarvest}
+                          />
+                          <FormComponent
+                            name="Stage 1 Duration"
+                            inputType="number"
+                            value={this.state.plantInfo.stage1Duration}
+                            onChange={this.onChangeStage1Duration}
+                          />
+                          <FormComponent
+                            name="Stage 2 Duration"
+                            inputType="number"
+                            value={this.state.plantInfo.stage2Duration}
+                            onChange={this.onChangeStage2Duration}
+                          />
+                          <FormComponent
+                            name="Stage 3 Duration"
+                            inputType="number"
+                            value={this.state.plantInfo.stage3Duration}
+                            onChange={this.onChangeStage3Duration}
+                          />
+                          <FormComponent
+                            name="Stage 4 Duration"
+                            inputType="number"
+                            value={this.state.plantInfo.stage4Duration}
+                            onChange={this.onChangeStage4Duration}
+                          />
+                          <FormComponent
+                            name="Soil"
                             inputType="text"
-                            value={this.state.plantInfo.maxTemperature}
-                            onChange={this.onChangeMaxTemp}
+                            value={this.state.plantInfo.solid}
+                            onChange={this.onChangeSolid}
                           />
                           <Row>
                             <Col>
