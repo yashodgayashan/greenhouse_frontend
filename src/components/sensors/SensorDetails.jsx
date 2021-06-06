@@ -142,7 +142,8 @@ class SensorDetails extends Component {
   };
 
   handleEditSensor = () => {
-    new ResourceAPIs()
+    if (this.validation()) {
+      new ResourceAPIs()
       .updateSensor(getIdFromUrl(), this.state.sensor)
       .then(result => {
         MySwal.fire(
@@ -158,7 +159,53 @@ class SensorDetails extends Component {
           error
         });
       });
+    } else {
+      MySwal.fire(
+        "Not Updated!",
+        "All fields required.",
+        "Try again1"
+      );
+    }
   };
+
+  validation = () => {
+    let formData = this.state;
+    let formIsValid = true;
+
+    if (!formData.sensor.name) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.description) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.dataType) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.minValue) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.maxValue) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.technology) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.workingVoltage) {
+      formIsValid = false;
+    }
+
+    if (!formData.sensor.dimensions) {
+      formIsValid = false;
+    }
+
+    return formIsValid;
+  }
 
   render() {
     if (!this.state.isSensorLoaded) {

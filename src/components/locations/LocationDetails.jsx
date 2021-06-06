@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Clear, ThreeSixty } from "@material-ui/icons";
+import { Clear } from "@material-ui/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -103,7 +103,6 @@ class LocationDetails extends Component {
 
   handleEditLocation = () => {
     if (this.validation()) {
-      console.log('validate');
       new ResourceAPIs()
       .updateLocation(getIdFromUrl(), this.state.location)
       .then(result => {
@@ -121,7 +120,6 @@ class LocationDetails extends Component {
         });
       });
     } else {
-      console.log('not');
       MySwal.fire(
         "Not Updated!",
         "All fields required.",
