@@ -5,7 +5,7 @@ import Col from "react-bootstrap/Col";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import { Clear } from "@material-ui/icons";
+import { Clear, ThreeSixty } from "@material-ui/icons";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
 
@@ -102,7 +102,9 @@ class LocationDetails extends Component {
   };
 
   handleEditLocation = () => {
-    new ResourceAPIs()
+    if (this.validation()) {
+      console.log('validate');
+      new ResourceAPIs()
       .updateLocation(getIdFromUrl(), this.state.location)
       .then(result => {
         MySwal.fire(
@@ -118,7 +120,38 @@ class LocationDetails extends Component {
           error
         });
       });
+    } else {
+      console.log('not');
+      MySwal.fire(
+        "Not Updated!",
+        "All fields required.",
+        "Try again1"
+      );
+    }
   };
+
+  validation = () => {
+    let formData = this.state;
+    let formIsValid = true;
+
+    if (!formData.location.name) {
+      formIsValid = false;
+    }
+
+    if (!formData.location.location) {
+      formIsValid = false;
+    }
+
+    if (!formData.location.latitude) {
+      formIsValid = false;
+    }
+
+    if (!formData.location.longatude) {
+      formIsValid = false;
+    }
+
+    return formIsValid;
+  }
 
   render() {
     if (!this.state.isLocationLoaded) {
