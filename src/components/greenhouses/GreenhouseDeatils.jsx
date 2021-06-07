@@ -141,7 +141,8 @@ class GreenhouseDetails extends Component {
   };
 
   handleEditGreenhouse = () => {
-    new ResourceAPIs()
+    if (this.validation()) {
+      new ResourceAPIs()
       .updateGreenhouse(getIdFromUrl(), this.state.greenhouse)
       .then(result => {
         MySwal.fire(
@@ -157,7 +158,41 @@ class GreenhouseDetails extends Component {
           error
         });
       });
+    } else {
+      MySwal.fire(
+        "Not Updated!",
+        "All fields required.",
+        "Try again1"
+      );
+    }
   };
+
+  validation = () => {
+    let formData = this.state;
+    let formIsValid = true;
+
+    if (!formData.greenhouse.name) {
+      formIsValid = false;
+    }
+
+    if (!formData.greenhouse.location) {
+      formIsValid = false;
+    }
+
+    if (!formData.greenhouse.length) {
+      formIsValid = false;
+    }
+
+    if (!formData.greenhouse.width) {
+      formIsValid = false;
+    }
+
+    if (!formData.greenhouse.height) {
+      formIsValid = false;
+    }
+
+    return formIsValid;
+  } 
 
   render() {
     if (!this.state.isGreenhouseLoaded) {
