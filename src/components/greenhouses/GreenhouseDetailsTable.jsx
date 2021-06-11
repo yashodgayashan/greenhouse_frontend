@@ -8,6 +8,9 @@ import TableBody from "@material-ui/core/TableBody";
 import EditIcon from "@material-ui/icons/Edit";
 import Paper from "@material-ui/core/Paper";
 import DeleteIcon from "@material-ui/icons/Delete";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
 
 import { format2NiceDate } from "../../utils/DateUtils";
 import {

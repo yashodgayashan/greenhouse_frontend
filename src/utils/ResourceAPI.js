@@ -87,6 +87,10 @@ export default class ResourceAPI {
     return this.getHTTPClient().put("/greenhouses/" + id, greenhouse);
   }
 
+  getGreenhouseData(id, startDate, endDate) {
+    return this.getHTTPClient().get("/greenhouses/" + id + "/data?startDate=" + startDate + "&endDate=" + endDate)
+  }
+
   // Sensors
   searchSensors(filters) {
     return this.getHTTPClient().post("/sensors/search", filters);
