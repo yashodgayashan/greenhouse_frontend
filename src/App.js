@@ -4,6 +4,10 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 
+import Box from '@material-ui/core/Box'; 
+
+
+
 import Locations from "./components/locations/Locations";
 import LocationDetails from "./components/locations/LocationDetails";
 import Greenhouses from "./components/greenhouses/Greenhouses";
@@ -22,6 +26,10 @@ import Defects from "./components/defects/Defects";
 import DefectDetails from "./components/defects/DefectDetails";
 
 import Harvest from "./components/harvest/Harvest";
+import Green from "./components/green/Green";
+
+
+
 
 class App extends Component {
   state = {};
@@ -33,17 +41,22 @@ class App extends Component {
       height: "100%",
       backgroundPosition: "center",
       backgroundRepeat: "no-repeat",
-      backgroundSize: "cover"
+      backgroundSize: "cover",
+
+     
     };
+    
     return (
       <div>
         <Navbar collapseOnSelect expand="lg" bg="dark" variant="dark">
-          <Navbar.Brand href="/">Green</Navbar.Brand>
+
+          <Navbar.Brand href="/green">Green</Navbar.Brand>
           <Navbar.Toggle aria-controls="responsive-navbar-nav" />
           <Navbar.Collapse
-            id="responsive-navbar-nav"
+            id="Green"
             className="justify-content-end"
           >
+            
             <Nav className="mr-auto">
               <NavDropdown
                 title="Environment Control"
@@ -130,10 +143,14 @@ class App extends Component {
               <Route exact path="/defects/:id">
                 <DefectDetails />
               </Route>
+              <Route exact path="/green">
+                <Green/>
+              </Route>
             </Switch>
           </div>
         </Router>
-      </div>
+
+ </div>
     );
   }
 }

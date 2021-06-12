@@ -10,7 +10,7 @@ import LocationDetails from "../locations/LocationDetails";
 import Greenhouses from "../greenhouses/Greenhouses";
 import GreenhouseDetails from "../greenhouses/GreenhouseDeatils";
 import Sensors from "../sensors/Sensors";
-import SensorDetails from "../sensors/SensorDetails";
+import SensorDetails from "../sensors/SensorDetails"; 
 import Nodes from "../nodes/Nodes";
 import NodeDetails from "../nodes/NodeDetails";
 import NodeSensor from "../nodeSensors/NodeSensors";
