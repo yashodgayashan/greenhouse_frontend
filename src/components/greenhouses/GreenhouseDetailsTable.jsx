@@ -72,6 +72,7 @@ class GreenhouseDetailsTable extends Component {
                   <TableCell align="right">Length(ft)</TableCell>
                   <TableCell align="right">Height(ft)</TableCell>
                   <TableCell align="right">Width(ft)</TableCell>
+                  <TableCell align="right">Water Flow</TableCell>
                   <TableCell align="right">Created At</TableCell>
                   <TableCell align="right">Modified At</TableCell>
                   <TableCell align="right">Controlls</TableCell>
@@ -93,6 +94,7 @@ class GreenhouseDetailsTable extends Component {
                     <TableCell align="right">{row.length}</TableCell>
                     <TableCell align="right">{row.height}</TableCell>
                     <TableCell align="right">{row.width}</TableCell>
+                    <TableCell align="right">{row.waterFlow}</TableCell>
                     <TableCell align="right">
                       {format2NiceDate(row.createdAt)}
                     </TableCell>

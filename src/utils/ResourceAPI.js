@@ -71,6 +71,7 @@ export default class ResourceAPI {
       name: null,
       location: null,
       locationId: null,
+      waterFlow: null,
       imageURL: null,
       width: null,
       height: null,
@@ -89,6 +90,30 @@ export default class ResourceAPI {
 
   getGreenhouseData(id, startDate, endDate) {
     return this.getHTTPClient().get("/greenhouses/" + id + "/data?startDate=" + startDate + "&endDate=" + endDate)
+  }
+
+  // Water Schedule
+
+  getWaterSchedules() {
+    return this.getHTTPClient().get("/schedules");
+  }
+
+  getWaterSchedulesByGreenhouseId(id) {
+    return this.getHTTPClient().get("/schedules/greenhouse/" + id);
+  }
+
+  createSchedule(isEnabled, schedule) {
+    console.log(isEnabled);
+    console.log(schedule);
+    return this.getHTTPClient().post("/schedules?isEnabled=" + isEnabled, schedule);
+  }
+
+  updateWaterSchedule(id, waterSchedule) {
+    return this.getHTTPClient().put("/schedules/" + id, waterSchedule);
+  }
+
+  deleteWaterSchedule(id) {
+    return this.getHTTPClient().delete("/schedules/" + id);
   }
 
   // Sensors
@@ -226,6 +251,11 @@ export default class ResourceAPI {
   //Defect Detection
   predictHarvest(data) {
     return this.getHTTPClient().post("/harvest", data);
+  }
+
+  // Cucumber identification.
+  identifyCucumber(data) {
+    return this.getHTTPClient().post("/harvest/identify", data);
   }
 
   // Defects

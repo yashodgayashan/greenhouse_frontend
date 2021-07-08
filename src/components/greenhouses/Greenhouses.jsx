@@ -11,7 +11,6 @@ import AddItem from "../utils/AddItem";
 import ResourceAPIs from "../../utils/ResourceAPI";
 import GreenhouseDetailsTable from "./GreenhouseDetailsTable";
 import { handleErr } from "../utils/MiscellaniosUtils";
-import ChartsGrid from "./dataVisualization/ChartsGrid";
 
 class Greenhouses extends Component {
   constructor(props) {
