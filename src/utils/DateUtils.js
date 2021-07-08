@@ -25,6 +25,19 @@ export function format2NiceDate(date) {
   return month + " " + dd + ", " + yyyy + " " + hh + ":" + mm + ":" + ss;
 }
 
+export function format2Time (date) {
+  let d = new Date(date);
+
+  let hh = formatNo2TwoDigits(d.getHours());
+  let mm = formatNo2TwoDigits(d.getMinutes());
+
+  if (hh === "00") {
+
+  }
+
+  return hh + ":" + mm;
+}
+
 function getMonthName(date) {
   let month = [];
   month[0] = "Jan";
